@@ -15,7 +15,7 @@ class ProductReturnPredictor:
     def process_data(self):
         """Preprocess dataset: feature engineering & encoding"""
         self.df['Transaction Type'] = self.df['Transaction Type'].apply(lambda x: x == "PURCHASE")
-        self.df['Product'] = self.df['Product ID'] + "-" + self.df['Product Name']
+        self.df['Product'] = f"{self.df['Product ID']} - {self.df['Product Name']}"
         self.df.rename(columns={'Product Category': 'Category'}, inplace=True)
         self.df['Returned'] = self.df['Return Reason'].notnull().astype(int)
 
