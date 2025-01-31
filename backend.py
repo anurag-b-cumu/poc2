@@ -21,7 +21,7 @@ class ProductReturnPredictor:
         self.y = self.df['Returned']
         self.X = self.df.drop(columns=['Returned'])
 
-        scaler = StandardScaler()
+        self.scaler = StandardScaler()
         X_scaled = scaler.fit_transform(self.X)
 
         X_train, X_test, y_train, y_test = train_test_split(X_scaled, self.y, test_size=0.2, random_state=42, stratify=self.y)
@@ -43,6 +43,6 @@ class ProductReturnPredictor:
                 product_features[0, i] = 1  # Activate selected product
                 break
         
-        product_features_scaled = scaler.transform(product_features)
+        product_features_scaled = self.scaler.transform(product_features)
         return_prob = self.model.predict_proba(product_features_scaled)[0][1]
         return f"{return_prob*100:.2f}%"
