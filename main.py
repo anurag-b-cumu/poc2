@@ -25,4 +25,4 @@ selected_product_rf = st.selectbox("🛍️ Choose a product:", product_list, ke
 if selected_product_rf:
     return_prob = predictor.get_return_probability(selected_product_rf)
     st.header("📊 Prediction Result")
-        st.subheader(f'🔄 Return Probability: {return_prob}')
+    st.subheader(f'🔄 Return Probability: {return_prob}')
