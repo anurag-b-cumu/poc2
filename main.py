@@ -30,7 +30,7 @@ with Customer:
     product_list = predictor.list_customer()
     
     st.subheader("🔎 Select a customer to predict return probability")
-    selected_product_rf = st.selectbox("🛍️ Select Customer:", product_list, key="rf_product")
+    selected_product_rf = st.selectbox("🛍️ Select Customer:", product_list, key="rf_customer")
     
     # Display prediction result
     if selected_product_rf:
