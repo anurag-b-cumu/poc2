@@ -11,11 +11,14 @@ class ProductReturnPredictor:
         self.df = pd.read_csv(file_path)
         self.df['Transaction Type'] = self.df['Transaction Type'].apply(lambda x: x == "PURCHASE")
         self.df['Returned'] = self.df['Return Reason'].notnull().astype(int)
-        self.df.drop(columns=['Customer ID', 'Customer Name', 'Order ID', 'Product Name', 'Return Reason', 'Transaction Date', 'Product Category'], inplace=True)
-        self.df = pd.get_dummies(self.df, columns=['Product ID'])
+        self.df.drop(columns=['Customer Name', 'Order ID', 'Product Name', 'Return Reason', 'Transaction Date', 'Product Category'], inplace=True)
+        self.df = pd.get_dummies(self.df, columns=['Product ID', 'Customer ID'])
 
     def list_prod(self):
         return [col.replace("Product ID_", "") for col in self.df.columns if col.startswith("Product ID_")]
+
+    def list_customer(self):
+        return [col.replace("Customer ID_", "") for col in self.df.columns if col.startswith("Customer ID_")]
     
     def train_model(self):
         self.y = self.df['Returned']
@@ -36,7 +39,7 @@ class ProductReturnPredictor:
 
         return f"{rf_accuracy*100:.2f}"
 
-    def get_return_probability(self, product_id):
+    def get_return_probability_product(self, product_id):
         product_features = np.zeros((1, self.X.shape[1]))  # Initialize empty feature vector
         for i, col in enumerate(self.X.columns):
             if col == f"Product ID_{product_id}":
@@ -46,3 +49,14 @@ class ProductReturnPredictor:
         product_features_scaled = self.scaler.transform(product_features)
         return_prob = self.model.predict_proba(product_features_scaled)[0][1]
         return f"{return_prob*100:.2f}%"
+
+    def get_return_probability_customer(self, customer_id):
+        product_features = np.zeros((1, self.X.shape[1]))  # Initialize empty feature vector
+            for i, col in enumerate(self.X.columns):
+                if col == f"Customer ID_{customer_id}":
+                    product_features[0, i] = 1  # Activate selected product
+                    break
+            
+            product_features_scaled = self.scaler.transform(product_features)
+            return_prob = self.model.predict_proba(product_features_scaled)[0][1]
+            return f"{return_prob*100:.2f}%"
