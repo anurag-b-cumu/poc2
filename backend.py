@@ -34,7 +34,7 @@ class ProductReturnPredictor:
         rf_accuracy = accuracy_score(y_test, y_pred)
         rf_report = classification_report(y_test, y_pred)
 
-        return f"{rf_accuracy:.2f}"
+        return f"{rf_accuracy*100:.2f}"
 
     def get_return_probability(self, product_id):
         product_features = np.zeros((1, self.X.shape[1]))  # Initialize empty feature vector
