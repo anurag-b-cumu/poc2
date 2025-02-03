@@ -15,7 +15,7 @@ product_list = predictor.list_prod()
 # Display training progress
 st.subheader("🎯 Training Random Forest Model...")
 rf_accuracy = predictor.train_model()
-st.success(f"✅ Model trained with {rf_accuracy*100}% accuracy!")
+st.success(f"✅ Model trained with {rf_accuracy}% accuracy!")
 
 # Select a product to predict return probability
 st.subheader("🔎 Select a product to predict return probability")
