@@ -52,11 +52,11 @@ class ProductReturnPredictor:
 
     def get_return_probability_customer(self, customer_id):
         product_features = np.zeros((1, self.X.shape[1]))  # Initialize empty feature vector
-            for i, col in enumerate(self.X.columns):
-                if col == f"Customer ID_{customer_id}":
-                    product_features[0, i] = 1  # Activate selected product
-                    break
+        for i, col in enumerate(self.X.columns):
+            if col == f"Customer ID_{customer_id}":
+                product_features[0, i] = 1  # Activate selected product
+                break
             
-            product_features_scaled = self.scaler.transform(product_features)
-            return_prob = self.model.predict_proba(product_features_scaled)[0][1]
-            return f"{return_prob*100:.2f}%"
+        product_features_scaled = self.scaler.transform(product_features)
+        return_prob = self.model.predict_proba(product_features_scaled)[0][1]
+        return f"{return_prob*100:.2f}%"
