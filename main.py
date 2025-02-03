@@ -5,7 +5,7 @@ from backend import ProductReturnPredictor
 st.title("📦 Product Return Prediction")
 
 # File upload
-uploaded_file = "retail_sales_data.csv"  # Placeholder for simplicity
+uploaded_file = "retail_sales.csv"  # Placeholder for simplicity
 
 if uploaded_file:
     predictor = ProductReturnPredictor(uploaded_file)
