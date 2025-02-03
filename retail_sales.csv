@@ -1,4 +1,4 @@
-Transaction Date,Customer ID,Customer Name,Order ID,Product ID,Product Name,Product Category,Quantity,Unit Price,Total Amount,Transaction Type,Return Reason12/22/2023,C501,Customer 501,ORD99991,P051,Premium Athletic Outerwear,Outerwear,2,238.48,476.96,PURCHASE,
+Transaction Date,Customer ID,Customer Name,Order ID,Product ID,Product Name,Product Category,Quantity,Unit Price,Total Amount,Transaction Type,Return Reason12/22/2023,C501,Customer 501,ORD99991,P051,Premium Athletic Outerwear,Outerwear,2,238.48,476.96,PURCHASE,12/22/2023,C502,Customer 502,ORD99992,P052,Premium Athletic Outerwear,Outerwear,-2,159.32,-318.64,RETURN,Wrong Size
 12/22/2023,C369,Customer 369,ORD00001,P046,Premium Athletic Outerwear,Outerwear,2,238.48,476.96,PURCHASE,
 08/08/2023,C187,Customer 187,ORD00002,P021,Basic Athletic Swimwear,Swimwear,1,128.01,128.01,PURCHASE,
 01/15/2023,C422,Customer 422,ORD00003,P025,Slim Vintage Shirts,Shirts,2,90.71,181.42,PURCHASE,
