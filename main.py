@@ -5,35 +5,38 @@ from backend import ProductReturnPredictor
 st.title("📦 Product Return Prediction")
 
 # File upload
-uploaded_file = "retail_sales_data.csv"
+uploaded_file = "retail_sales_data.csv"  # Placeholder for simplicity
 
-predictor = ProductReturnPredictor(uploaded_file)
+if uploaded_file:
+    predictor = ProductReturnPredictor(uploaded_file)
 
-st.subheader("🎯 Training Random Forest Model...")
-rf_accuracy = predictor.train_model()
-st.success(f"✅ Model trained with {rf_accuracy}% accuracy!")
+    st.subheader("🎯 Training Random Forest Model...")
+    rf_accuracy = predictor.train_model()
+    st.success(f"✅ Model trained with {rf_accuracy}% accuracy!")
 
-Product, Customer = st.tabs(["Product", "Customer"])
-with Product:
-    product_list = predictor.list_prod()
-    
-    st.subheader("🔎 Select a product to predict return probability")
-    selected_product_rf = st.selectbox("🛍️ Choose a product:", product_list, key="rf_product")
-    
-    # Display prediction result
-    if selected_product_rf:
-        return_prob = predictor.get_return_probability_product(selected_product_rf)
-        st.header("📊 Prediction Result")
-        st.subheader(f'🔄 Return Probability: {return_prob}')
+    # Tabs for Product and Customer
+    Product, Customer = st.tabs(["Product", "Customer"])
 
-with Customer:
-    product_list = predictor.list_customer()
-    
-    st.subheader("🔎 Select a customer to predict return probability")
-    selected_product_rf = st.selectbox("🛍️ Select Customer:", product_list, key="rf_customer")
-    
-    # Display prediction result
-    if selected_product_rf:
-        return_prob = predictor.get_return_probability_customer(selected_product_rf)
-        st.header("📊 Prediction Result")
-        st.subheader(f'🔄 Return Probability: {return_prob}')
+    with Product:
+        product_list = predictor.list_prod()
+
+        st.subheader("🔎 Select a product to predict return probability")
+        selected_product = st.selectbox("🛍️ Choose a product:", product_list, key="product")
+
+        if selected_product:
+            return_prob = predictor.get_return_probability_product(selected_product)
+            st.header("📊 Prediction Result")
+            st.subheader(f'🔄 Return Probability: {return_prob}')
+
+    with Customer:
+        customer_list = predictor.list_customer()
+
+        st.subheader("🔎 Select a customer to predict return probability")
+        selected_customer = st.selectbox("🛍️ Select Customer:", customer_list, key="customer")
+
+        if selected_customer:
+            return_prob = predictor.get_return_probability_customer(selected_customer)
+            st.header("📊 Prediction Result")
+            st.subheader(f'🔄 Return Probability: {return_prob}')
+else:
+    st.warning("Please upload a valid dataset to continue.")
