@@ -3,9 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
-from sklearn.calibration import CalibratedClassifierCV
-from imblearn.over_sampling import SMOTE  # Added for handling class imbalance
+from sklearn.metrics import accuracy_score, classification_report
 
 class ProductReturnPredictor:
     def __init__(self, file_path):
@@ -13,10 +11,15 @@ class ProductReturnPredictor:
         self.preprocess_data()
 
     def preprocess_data(self):
+        # Basic data cleaning
         self.df['Transaction Type'] = self.df['Transaction Type'].apply(lambda x: x == "PURCHASE")
         self.df['Returned'] = self.df['Return Reason'].notnull().astype(int)
-        self.df.drop(columns=['Customer Name', 'Order ID', 'Product Name', 
-                               'Return Reason', 'Transaction Date', 'Product Category'], inplace=True)
+
+        # Dropping irrelevant columns
+        self.df.drop(columns=['Customer Name', 'Order ID', 'Product Name', 'Return Reason', 
+                               'Transaction Date', 'Product Category'], inplace=True)
+
+        # Encoding categorical variables
         self.df = pd.get_dummies(self.df, columns=['Product ID', 'Customer ID'])
 
     def list_prod(self):
@@ -29,20 +32,14 @@ class ProductReturnPredictor:
         self.y = self.df['Returned']
         self.X = self.df.drop(columns=['Returned'])
 
-        # Handle class imbalance
-        smote = SMOTE(random_state=42)
-        X_resampled, y_resampled = smote.fit_resample(self.X, self.y)
-
         self.scaler = StandardScaler()
-        X_scaled = self.scaler.fit_transform(X_resampled)
+        X_scaled = self.scaler.fit_transform(self.X)
 
         X_train, X_test, y_train, y_test = train_test_split(
-            X_scaled, y_resampled, test_size=0.2, random_state=42, stratify=y_resampled
+            X_scaled, self.y, test_size=0.2, random_state=42, stratify=self.y
         )
 
-        # Random Forest with calibrated probabilities
-        rf = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
-        self.model = CalibratedClassifierCV(rf, method='isotonic', cv=5)
+        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
         self.model.fit(X_train, y_train)
 
         y_pred = self.model.predict(X_test)
@@ -55,10 +52,10 @@ class ProductReturnPredictor:
         if feature_name not in self.X.columns:
             return "N/A"
 
-        # Use mean values for features instead of zero
-        feature_vector = self.X.mean().values.reshape(1, -1)
+        # Create feature vector
+        feature_vector = np.zeros((1, self.X.shape[1]))
         idx = self.X.columns.get_loc(feature_name)
-        feature_vector[0, idx] = 1  # Activate the specific product/customer
+        feature_vector[0, idx] = 1
 
         feature_vector_scaled = self.scaler.transform(feature_vector)
         return_prob = self.model.predict_proba(feature_vector_scaled)[0][1]
