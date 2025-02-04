@@ -59,6 +59,8 @@ class ProductReturnPredictor:
 
         feature_vector_scaled = self.scaler.transform(feature_vector)
         return_prob = self.model.predict_proba(feature_vector_scaled)[0][1]
+        if id_type=='Customer':
+            return f"{(1-return_prob) * 100:.2f}%"
         return f"{return_prob * 100:.2f}%"
 
     def get_return_probability_product(self, product_id):
